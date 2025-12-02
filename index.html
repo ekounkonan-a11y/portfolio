@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Portfolio — Ton Nom</title>
+  <meta name="description" content="Portfolio professionnel — Présentation, compétences, projets et contact." />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome (icônes) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Tk..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Favicons simple -->
+  <link rel="icon" href="https://picsum.photos/seed/favicon/32" />
+
+  <!-- Basic performance hint -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <style>
+    /* ============================
+       VARIABLES & RESET (mobile-first)
+       ============================ */
+    :root{
+      /* Palette principale (modifiable) */
+      --bg: #f7fbff;
+      --card: #ffffff;
+      --text: #0b1220;
+      --muted: #5b6470;
+      --accent: #0b5cff;      /* bleu/navy accent */
+      --accent-2: #102f5a;    /* navy foncé */
+      --success: #16a34a;
+      --glass: rgba(11,92,255,0.08);
+
+      /* UI */
+      --radius: 14px;
+      --shadow: 0 6px 20px rgba(12,20,40,0.08);
+      --shadow-strong: 0 12px 34px rgba(12,20,40,0.12);
+
+      /* typography */
+      --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      --base-size: 16px;
+    }
+
+    /* Dark mode variables (applied when .dark on <html>) */
+    html.dark{
+      --bg: #071120;
+      --card: #081826;
+      --text: #e6eef8;
+      --muted: #a8b6c7;
+      --accent: #3aa0ff;
+      --accent-2: #08263b;
+      --glass: rgba(58,160,255,0.06);
+      --shadow: 0 6px 20px rgba(2,6,12,0.6);
+      --shadow-strong: 0 12px 34px rgba(2,6,12,0.7);
+    }
+
+    /* Reset & base */
+    *,*::before,*::after{box-sizing:border-box}
+    html{font-family:var(--font-sans);font-size:var(--base-size);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    body{margin:0;line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;height:auto;display:block}
+    button{font:inherit}
+
+    /* Skip link for accessibility */
+    .skip-link{position:fixed;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
+    .skip-link:focus{left:1rem;top:1rem;width:auto;height:auto;padding:0.5rem 0.75rem;background:var(--accent);color:#fff;border-radius:8px;z-index:9999}
+
+    /* ============================
+       LAYOUT
+       ============================ */
+    header{
+      position:sticky;top:0;z-index:60;
+      backdrop-filter: blur(6px);
+      background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4));
+      border-bottom:1px solid rgba(0,0,0,0.04);
+      box-shadow:var(--shadow);
+    }
+    html.dark header{
+      background:linear-gradient(180deg, rgba(8,24,38,0.6), rgba(8,24,38,0.4));
+      border-bottom:1px solid rgba(255,255,255,0.03);
+    }
+    .container{
+      max-width:1100px;margin:0 auto;padding:1rem;display:flex;align-items:center;gap:1rem;
+    }
+
+    /* Header layout */
+    .brand{display:flex;align-items:center;gap:.75rem;font-weight:700}
+    .brand img{width:44px;height:44px;border-radius:10px;object-fit:cover;box-shadow:var(--shadow)}
+    nav{margin-left:auto}
+    .nav-list{display:flex;gap:1rem;align-items:center}
+    .nav-list a{padding:.5rem .6rem;border-radius:8px}
+    .nav-list a:focus{outline:3px solid color-mix(in srgb, var(--accent) 30%, transparent)}
+
+    /* Hamburger - visible on small */
+    .hamburger{display:flex;border:none;background:none;align-items:center;gap:.6rem;padding:.35rem;border-radius:10px}
+    .hamburger .bar{width:22px;height:2px;background:var(--text);border-radius:2px;transition:transform .25s,opacity .2s}
+    .hamburger[aria-expanded="true"] .bar:nth-child(1){transform:translateY(6px) rotate(45deg)}
+    .hamburger[aria-expanded="true"] .bar:nth-child(2){opacity:0}
+    .hamburger[aria-expanded="true"] .bar:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+    .mobile-menu{display:none}
+
+    /* HERO */
+    .hero{
+      padding:3.25rem 1rem;
+      display:grid;gap:1.25rem;
+      grid-template-columns:1fr;
+      align-items:center;
+    }
+    .hero-inner{display:flex;flex-direction:column;gap:1rem;max-width:720px}
+    .kicker{display:inline-block;background:var(--glass);color:var(--accent-2);padding:.25rem .5rem;border-radius:999px;font-weight:600;font-size:.85rem}
+    h1{font-size:2rem;margin:.25rem 0 0}
+    p.lead{color:var(--muted);margin:0}
+    .hero-cta{display:flex;gap:.75rem;margin-top:1rem;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.6rem .9rem;border-radius:12px;border:0;font-weight:600;cursor:pointer;box-shadow:var(--shadow)}
+    .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white}
+    .btn-ghost{background:transparent;color:var(--text);border:1px solid rgba(0,0,0,0.06)}
+
+    /* Grid sections */
+    section{padding:2rem 1rem}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:1rem}
+    .row{display:flex;flex-direction:column;gap:1rem}
+    .grid{display:grid;gap:1rem}
+
+    /* ABOUT */
+    .about{
+      display:grid;gap:1rem;
+      grid-template-columns:1fr;
+      align-items:center;
+    }
+    .about .media{width:150px;height:150px;border-radius:16px;overflow:hidden;flex-shrink:0}
+    .about .bio{color:var(--muted)}
+
+    /* SKILLS */
+    .skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+    .skill{
+      display:flex;flex-direction:column;gap:.5rem;
+    }
+    .progress{
+      height:10px;background:linear-gradient(90deg,rgba(0,0,0,0.04),rgba(0,0,0,0.02));border-radius:999px;overflow:hidden;
+    }
+    .progress > i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:999px;transition:width 1s ease-out}
+
+    /* PROJECTS */
+    .projects-controls{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem}
+    .filter-btn{padding:.45rem .7rem;border-radius:10px;border:1px solid rgba(0,0,0,0.06);cursor:pointer}
+    .filter-btn[aria-pressed="true"]{background:var(--accent);color:white;border:0}
+    .projects-grid{display:grid;grid-template-columns:1fr;gap:1rem}
+    .project-card{overflow:hidden;border-radius:12px;display:flex;flex-direction:column;transition:transform .25s,box-shadow .25s;cursor:pointer}
+    .project-card img{height:180px;object-fit:cover}
+    .project-card .proj-body{padding:0.9rem;display:flex;flex-direction:column;gap:.6rem}
+    .project-meta{display:flex;justify-content:space-between;align-items:center;font-size:.9rem;color:var(--muted)}
+
+    .project-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-strong)}
+
+    /* CONTACT */
+    .contact-grid{display:grid;gap:1rem}
+    .contact-form{display:grid;gap:.6rem}
+    label{font-weight:600;font-size:.9rem}
+    input,textarea,select{padding:.65rem;border-radius:10px;border:1px solid rgba(0,0,0,0.07);background:transparent;color:var(--text)}
+    input:focus,textarea:focus{outline:3px solid color-mix(in srgb, var(--accent) 30%, transparent)}
+    .form-row{display:grid;grid-template-columns:1fr;gap:.5rem}
+
+    /* FOOTER */
+    footer{padding:1.25rem 1rem;border-top:1px solid rgba(0,0,0,0.04);margin-top:auto}
+    .socials{display:flex;gap:0.6rem;align-items:center}
+    .socials a{display:inline-flex;padding:.5rem;border-radius:10px}
+
+    /* Utilities */
+    .muted{color:var(--muted)}
+    .caps{font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+    /* ============================
+       RESPONSIVE (desktop enhancements)
+       ============================ */
+    @media(min-width:720px){
+      .hero{grid-template-columns:1fr 360px;align-items:center;padding:4rem 1rem}
+      .about{grid-template-columns:220px 1fr}
+      .projects-grid{grid-template-columns:repeat(2,1fr)}
+      .skills-grid{grid-template-columns:repeat(3,1fr)}
+    }
+    @media(min-width:1000px){
+      .projects-grid{grid-template-columns:repeat(3,1fr)}
+      .nav-list{gap:1.25rem}
+    }
+
+    /* Mobile nav styles */
+    @media(max-width:719px){
+      .nav-list{display:none}
+      .mobile-menu{display:block}
+      .mobile-drawer{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:flex-start;justify-content:flex-end;padding:1rem;z-index:80}
+      .mobile-drawer .drawer-panel{width:280px;background:var(--card);border-radius:12px;padding:1rem;box-shadow:var(--shadow-strong)}
+      .mobile-drawer[open]{display:flex}
+      .drawer-panel a{display:block;padding:.6rem;border-radius:8px}
+    }
+
+    /* Small accessibility / focus */
+    :focus{outline:none}
+    a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid color-mix(in srgb, var(--accent) 30%, transparent);outline-offset:3px;border-radius:8px}
+
+    /* Animations for reveal (will be toggled by JS) */
+    .reveal{opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.in-view{opacity:1;transform:none}
+
+  </style>
+</head>
+<body>
+  <!-- Skip link -->
+  <a class="skip-link" href="#main">Aller au contenu</a>
+
+  <!-- HEADER -->
+  <header role="banner" aria-label="En-tête du site">
+    <div class="container" style="align-items:center">
+      <div class="brand" aria-hidden="false">
+        <!-- logo: placeholder image via picsum.photos -->
+        <img src="https://picsum.photos/seed/profile/200/200" alt="Logo / Photo de profil">
+        <div>
+          <div style="font-size:.95rem">Ton Nom</div>
+          <div class="muted" style="font-size:.78rem">Développeur · Designer</div>
+        </div>
+      </div>
+
+      <!-- Desktop nav -->
+      <nav aria-label="Navigation principale">
+        <div class="nav-list" role="menubar" aria-hidden="false">
+          <a href="#hero" role="menuitem">Accueil</a>
+          <a href="#about" role="menuitem">À propos</a>
+          <a href="#skills" role="menuitem">Compétences</a>
+          <a href="#projects" role="menuitem">Projets</a>
+          <a href="#contact" role="menuitem">Contact</a>
+          <button id="theme-toggle" class="btn" aria-pressed="false" title="Basculer thème" aria-label="Basculer thème">
+            <i class="fa-regular fa-sun"></i>
+            <span class="muted" style="font-weight:600">Thème</span>
+          </button>
+        </div>
+
+        <!-- Mobile hamburger -->
+        <div class="mobile-menu" style="display:flex;align-items:center">
+          <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-drawer">
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+          </button>
+          <div id="mobile-drawer" class="mobile-drawer" role="dialog" aria-modal="true" aria-hidden="true">
+            <div class="drawer-panel" role="document" aria-label="Menu">
+              <nav>
+                <a href="#hero">Accueil</a>
+                <a href="#about">À propos</a>
+                <a href="#skills">Compétences</a>
+                <a href="#projects">Projets</a>
+                <a href="#contact">Contact</a>
+                <div style="margin-top:.5rem">
+                  <button id="theme-toggle-mobile" class="btn" aria-pressed="false" title="Basculer thème">
+                    <i class="fa-regular fa-moon"></i> Thème
+                  </button>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main id="main">
+    <!-- HERO -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <span class="kicker">Freelance • Développement web</span>
+        <h1 id="hero-title">Salut — je suis Ton Nom, je crée des interfaces modernes et performantes.</h1>
+        <p class="lead">Je conçois des expériences numériques claires, accessibles et rapides. Spécialité : front-end, UI/UX, animations légères et optimisation.</p>
+
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#projects"><i class="fa-solid fa-rocket"></i> Voir mes projets</a>
+          <a class="btn btn-ghost" href="#contact"><i class="fa-solid fa-envelope"></i> Me contacter</a>
+        </div>
+
+        <div style="margin-top:1rem" class="muted">Basé en Côte d'Ivoire • Disponible pour missions freelance</div>
+      </div>
+
+      <!-- Hero image / illustration -->
+      <aside class="card" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;height:220px">
+        <img src="https://picsum.photos/seed/hero/640/360" alt="Illustration" width="100%" height="100%" loading="lazy" style="border-radius:10px;object-fit:cover">
+      </aside>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" aria-labelledby="about-title">
+      <div class="container card about reveal">
+        <h2 id="about-title">À propos</h2>
+        <div style="display:flex;gap:1rem;align-items:center">
+          <div class="media" aria-hidden="true">
+            <img src="https://picsum.photos/seed/portrait/400/400" alt="Photo de profil" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+          </div>
+          <div>
+            <p style="margin-top:0"><strong>Ton Nom</strong> — développeur front-end et designer passionné par les interfaces claires et performantes. J'aime transformer des idées en produits digitaux réactifs, accessibles et optimisés.</p>
+            <p class="bio muted">Expérience avec HTML5, CSS3 (Flexbox / Grid), JavaScript moderne, frameworks, et bonnes pratiques d'accessibilité & performance.</p>
+
+            <div style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap">
+              <a class="btn btn-ghost" href="#projects"><i class="fa-solid fa-folder-open"></i> Portfolio</a>
+              <a class="btn btn-ghost" href="#contact"><i class="fa-solid fa-paper-plane"></i> Demander un devis</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" aria-labelledby="skills-title">
+      <div class="container reveal card">
+        <h2 id="skills-title">Compétences</h2>
+        <p class="muted">Compétences techniques et design — évaluations visuelles.</p>
+
+        <div class="skills-grid" style="margin-top:1rem">
+          <!-- Skill 1 -->
+          <div class="skill" role="group" aria-label="HTML">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:.6rem">
+                <i class="fa-brands fa-html5" aria-hidden="true"></i>
+                <div><strong>HTML5</strong><div class="muted" style="font-size:.82rem">Sémantique et accessibilité</div></div>
+              </div>
+              <div class="muted">90%</div>
+            </div>
+            <div class="progress" aria-hidden="true"><i data-width="90%"></i></div>
+          </div>
+
+          <!-- Skill 2 -->
+          <div class="skill" role="group" aria-label="CSS">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:.6rem">
+                <i class="fa-brands fa-css3-alt" aria-hidden="true"></i>
+                <div><strong>CSS / UI</strong><div class="muted" style="font-size:.82rem">Animations & responsive</div></div>
+              </div>
+              <div class="muted">88%</div>
+            </div>
+            <div class="progress" aria-hidden="true"><i data-width="88%"></i></div>
+          </div>
+
+          <!-- Skill 3 -->
+          <div class="skill" role="group" aria-label="JavaScript">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:.6rem">
+                <i class="fa-brands fa-js" aria-hidden="true"></i>
+                <div><strong>JavaScript</strong><div class="muted" style="font-size:.82rem">ES6+, DOM, APIs</div></div>
+              </div>
+              <div class="muted">82%</div>
+            </div>
+            <div class="progress" aria-hidden="true"><i data-width="82%"></i></div>
+          </div>
+
+          <!-- Skill 4 -->
+          <div class="skill" role="group" aria-label="Design">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:.6rem">
+                <i class="fa-solid fa-paint-brush" aria-hidden="true"></i>
+                <div><strong>Design</strong><div class="muted" style="font-size:.82rem">UI/UX & prototypes</div></div>
+              </div>
+              <div class="muted">80%</div>
+            </div>
+            <div class="progress" aria-hidden="true"><i data-width="80%"></i></div>
+          </div>
+
+          <!-- Add more skills as needed -->
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" aria-labelledby="projects-title">
+      <div class="container reveal">
+        <h2 id="projects-title">Projets</h2>
+        <p class="muted">Sélection de projets récents — clique pour voir les détails.</p>
+
+        <!-- Filter controls -->
+        <div class="projects-controls" role="toolbar" aria-label="Filtrer projets" style="margin-top:1rem">
+          <button class="filter-btn" data-filter="all" aria-pressed="true">Tous</button>
+          <button class="filter-btn" data-filter="web">Web</button>
+          <button class="filter-btn" data-filter="ui">UI/UX</button>
+          <button class="filter-btn" data-filter="app">App</button>
+        </div>
+
+        <!-- Projects grid -->
+        <div class="projects-grid" style="margin-top:1rem" id="projects-grid" aria-live="polite">
+          <!-- Project 1 -->
+          <article class="project-card card" data-category="web" tabindex="0" aria-labelledby="p1-title" role="article">
+            <img src="https://picsum.photos/seed/project1/800/450" alt="Aperçu Projet 1" loading="lazy">
+            <div class="proj-body">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <h3 id="p1-title" style="margin:0">Site entreprise</h3>
+                <span class="caps">Web</span>
+              </div>
+              <p class="muted" style="margin:0">Site vitrine responsive construit avec HTML, CSS et animations légères.</p>
+              <div class="project-meta">
+                <span class="muted">2025</span>
+                <div style="display:flex;gap:.5rem">
+                  <button class="btn btn-ghost" aria-label="Voir le projet 1"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+                  <button class="btn btn-ghost" aria-label="Détails projet 1"><i class="fa-solid fa-info"></i></button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="project-card card" data-category="ui" tabindex="0" aria-labelledby="p2-title" role="article">
+            <img src="https://picsum.photos/seed/project2/800/450" alt="Aperçu Projet 2" loading="lazy">
+            <div class="proj-body">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <h3 id="p2-title" style="margin:0">UI Kit Mobile</h3>
+                <span class="caps">UI/UX</span>
+              </div>
+              <p class="muted" style="margin:0">Prototype et composants pour applications mobiles, accessible et modulable.</p>
+              <div class="project-meta">
+                <span class="muted">2024</span>
+                <div style="display:flex;gap:.5rem">
+                  <button class="btn btn-ghost" aria-label="Voir le projet 2"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+                  <button class="btn btn-ghost" aria-label="Détails projet 2"><i class="fa-solid fa-info"></i></button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="project-card card" data-category="app" tabindex="0" aria-labelledby="p3-title" role="article">
+            <img src="https://picsum.photos/seed/project3/800/450" alt="Aperçu Projet 3" loading="lazy">
+            <div class="proj-body">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <h3 id="p3-title" style="margin:0">Dashboard SaaS</h3>
+                <span class="caps">App</span>
+              </div>
+              <p class="muted" style="margin:0">Dashboard admin avec tableaux de bord et visualisations basiques.</p>
+              <div class="project-meta">
+                <span class="muted">2023</span>
+                <div style="display:flex;gap:.5rem">
+                  <button class="btn btn-ghost" aria-label="Voir le projet 3"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+                  <button class="btn btn-ghost" aria-label="Détails projet 3"><i class="fa-solid fa-info"></i></button>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" aria-labelledby="contact-title">
+      <div class="container reveal card">
+        <h2 id="contact-title">Contact</h2>
+        <p class="muted">Remplis le formulaire et je te répondrai sous 48h.</p>
+
+        <div class="contact-grid" style="margin-top:1rem">
+          <form id="contact-form" class="contact-form" novalidate aria-describedby="contact-desc" action="#" method="post">
+            <div id="contact-desc" class="muted">Formulaire de contact — Les champs marqués d'une * sont requis.</div>
+
+            <div class="form-row" style="grid-template-columns:1fr 1fr">
+              <label for="name">Nom complet *</label>
+              <input id="name" name="name" type="text" required placeholder="Ton nom" aria-required="true">
+            </div>
+
+            <div class="form-row">
+              <label for="email">Email *</label>
+              <input id="email" name="email" type="email" required placeholder="ton@exemple.com" aria-required="true">
+            </div>
+
+            <div class="form-row">
+              <label for="subject">Sujet</label>
+              <input id="subject" name="subject" type="text" placeholder="Sujet du message">
+            </div>
+
+            <div class="form-row">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" rows="6" required placeholder="Écris ton message..." aria-required="true"></textarea>
+            </div>
+
+            <div style="display:flex;gap:.6rem;align-items:center">
+              <button type="submit" class="btn btn-primary" aria-label="Envoyer le message"><i class="fa-solid fa-paper-plane"></i> Envoyer</button>
+              <div id="form-status" class="muted" role="status" aria-live="polite"></div>
+            </div>
+          </form>
+
+          <aside class="card" aria-label="Informations de contact">
+            <h3 style="margin-top:0">Autres moyens</h3>
+            <p class="muted">Email: <a href="mailto:ton.email@example.com">ton.email@example.com</a></p>
+            <p class="muted">Téléphone: <a href="tel:+22500000000">+225 00 00 00 000</a></p>
+            <div style="margin-top:1rem" class="socials">
+              <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+              <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+              <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer role="contentinfo">
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center">
+      <div class="muted">© <span id="year"></span> Ton Nom. Tous droits réservés.</div>
+      <div class="socials">
+        <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================
+       JAVASCRIPT (défini en bas pour performance)
+       ============================ -->
+  <script>
+    /* =========================================
+       Portfolio JavaScript
+       Fonctionnalités:
+       - Menu hamburger mobile
+       - Theme toggle (persisté via localStorage)
+       - Filtrage des projets
+       - Validation du formulaire (côté client)
+       - Animations au scroll (IntersectionObserver)
+       - Animation des barres de compétences
+       - Petites optimisations d'accessibilité
+       ========================================= */
+
+    (function(){
+      'use strict';
+
+      /* Utility */
+      const $ = (sel, ctx=document) => ctx.querySelector(sel);
+      const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+
+      /* 1) Year auto */
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      /* 2) Mobile menu */
+      const hamburger = document.getElementById('hamburger');
+      const drawer = document.getElementById('mobile-drawer');
+
+      if(hamburger && drawer){
+        function toggleDrawer(open){
+          const expanded = !!open;
+          hamburger.setAttribute('aria-expanded', String(expanded));
+          drawer.toggleAttribute('open', expanded);
+          drawer.setAttribute('aria-hidden', String(!expanded));
+          // Manage focus for accessibility
+          if(expanded){
+            // focus first link
+            const first = drawer.querySelector('a, button');
+            if(first) first.focus();
+          } else {
+            hamburger.focus();
+          }
+        }
+        hamburger.addEventListener('click', ()=> toggleDrawer(!(drawer.hasAttribute('open'))));
+        // Close drawer when clicking outside panel
+        drawer.addEventListener('click', (e)=>{
+          if(e.target === drawer) toggleDrawer(false);
+        });
+        // Close on Escape
+        document.addEventListener('keydown', (e) => { if(e.key === 'Escape') toggleDrawer(false); });
+      }
+
+      /* 3) Theme toggle */
+      const themeToggle = $('#theme-toggle');
+      const themeToggleMobile = $('#theme-toggle-mobile');
+      const rootHtml = document.documentElement;
+      const THEME_KEY = 'portfolio-theme';
+
+      function applyTheme(theme){
+        if(theme === 'dark') rootHtml.classList.add('dark');
+        else rootHtml.classList.remove('dark');
+        if(themeToggle) themeToggle.setAttribute('aria-pressed', String(theme === 'dark'));
+        if(themeToggleMobile) themeToggleMobile.setAttribute('aria-pressed', String(theme === 'dark'));
+      }
+
+      // initialize from localStorage or system preference
+      const savedTheme = localStorage.getItem(THEME_KEY);
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+      function toggleTheme(){
+        const isDark = rootHtml.classList.contains('dark');
+        const next = isDark ? 'light' : 'dark';
+        applyTheme(next);
+        localStorage.setItem(THEME_KEY, next);
+      }
+      if(themeToggle) themeToggle.addEventListener('click', toggleTheme);
+      if(themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
+
+      /* 4) Project filtering */
+      const filterBtns = $$('.filter-btn');
+      const projectGrid = $('#projects-grid');
+
+      function setFilter(filter){
+        // update button states
+        filterBtns.forEach(btn => btn.setAttribute('aria-pressed', btn.dataset.filter === filter ? 'true' : 'false'));
+        const items = $$('.project-card', projectGrid);
+        items.forEach(it=>{
+          const cat = it.dataset.category || 'all';
+          if(filter === 'all' || cat === filter){
+            it.style.display = ''; // default
+          } else {
+            it.style.display = 'none';
+          }
+        });
+        // announce to assistive tech (aria-live handled on grid)
+      }
+
+      filterBtns.forEach(btn=>{
+        btn.addEventListener('click', ()=> setFilter(btn.dataset.filter));
+      });
+
+      /* 5) Contact form validation & fake submission */
+      const form = $('#contact-form');
+      const status = $('#form-status');
+
+      function emailValid(email){
+        // simple but robust-ish regex (no overmatching)
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+
+      if(form){
+        form.addEventListener('submit', (e)=>{
+          e.preventDefault();
+          status.textContent = '';
+          const data = new FormData(form);
+          const name = (data.get('name') || '').trim();
+          const email = (data.get('email') || '').trim();
+          const message = (data.get('message') || '').trim();
+
+          // Basic validation
+          if(!name){
+            status.textContent = 'Merci d’indiquer votre nom.';
+            $('#name').focus();
+            return;
+          }
+          if(!email || !emailValid(email)){
+            status.textContent = 'Merci d’indiquer un courriel valide.';
+            $('#email').focus();
+            return;
+          }
+          if(!message || message.length < 10){
+            status.textContent = 'Votre message doit contenir au moins 10 caractères.';
+            $('#message').focus();
+            return;
+          }
+
+          // Fake sending (replace with actual fetch to serverless endpoint / API)
+          status.textContent = 'Envoi en cours…';
+          // simulate network request
+          setTimeout(()=>{
+            status.textContent = 'Message envoyé — merci !';
+            form.reset();
+          }, 800);
+        });
+      }
+
+      /* 6) Scroll reveal animations (IntersectionObserver) */
+      const revealElems = $$('.reveal');
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+          }
+        });
+      }, {threshold: 0.12});
+
+      revealElems.forEach(el => io.observe(el));
+
+      /* 7) Animate skill bars when visible */
+      const skillBars = $$('.progress > i');
+      const skillObserver = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            const el = entry.target;
+            const w = el.getAttribute('data-width') || '70%';
+            // animate width
+            requestAnimationFrame(()=> el.style.width = w);
+            skillObserver.unobserve(el);
+          }
+        });
+      }, {threshold: 0.2});
+      skillBars.forEach(sb => skillObserver.observe(sb));
+
+      /* 8) Accessibility: keyboard interaction for project-cards (Enter opens link) */
+      $$('.project-card').forEach(card=>{
+        card.addEventListener('keydown', (e)=>{
+          if(e.key === 'Enter'){
+            // simulate click on the first button in the card
+            const btn = card.querySelector('button');
+            if(btn) btn.click();
+          }
+        });
+      });
+
+      /* 9) Prefer reduced motion (respect user preference) */
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(prefersReduced){
+        // disable transitions / animations
+        document.documentElement.style.setProperty('--shadow', 'none');
+        document.querySelectorAll('.reveal').forEach(r => { r.style.transition = 'none'; r.classList.add('in-view'); });
+      }
+
+      /* 10) Small progressive enhancement: allow filtering via URL param ?filter=web */
+      const urlParams = new URLSearchParams(location.search);
+      const initialFilter = urlParams.get('filter');
+      if(initialFilter){
+        const btn = filterBtns.find(b => b.dataset.filter === initialFilter);
+        if(btn) setFilter(initialFilter);
+      }
+
+      /* 11) Performance note: lazy load images attribute already set to loading="lazy"
+         Keep JS small and defer heavy libs (we're not loading any heavy libs here) */
+
+    })();
+  </script>
+</body>
+</html>
